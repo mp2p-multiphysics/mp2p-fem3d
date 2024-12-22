@@ -1,7 +1,11 @@
 # folders to ignore
+_archive/
+_archive_1d/
+_archive_2d/
 __pycache__/
 .vscode/
-Eigen/
+!Eigen/*
+!Eigen
 fem_test*/
 generator/
 input/
@@ -13,3 +17,5 @@ output/
 *.py
 *.csv
 fem_test*
+.gitignore
+*.txt
