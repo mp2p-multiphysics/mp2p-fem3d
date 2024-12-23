@@ -31,8 +31,57 @@ class Domain2D
         global point ID of local point 1
         ...
 
-    Point 0 and 1 refer to the left and right points of a line2 element.
-    Point 0, 1, and 2 refer to the left, middle, and right points of a line3 element.
+    Points 0 to 2 are shown below for a tri3 element in local coordinates.
+
+          (local y)
+             ^
+             |
+             2 \
+             |   \
+             |     \
+             |       \
+        <----1---------0------> (local x)
+             |
+             v
+    
+    Points 0 to 3 are shown below for a quad4 element in local coordinates.
+
+               (local y)
+                   ^
+                   |
+              1 ---|--- 2
+              |    |    | 
+        <----------+----------> (local x)     
+              |    |    |
+              0 ---|--- 3
+                   |
+                   v
+
+    Points 0 to 5 are shown below for a tri6 element in local coordinates.
+
+          (local y)
+             ^
+             |
+             4 \
+             |   \ 
+             3     5
+             |       \
+        <----2----1----0------> (local x)
+             |
+             v
+    
+    Points 0 to 7 are shown below for a quad8 element in local coordinates.
+
+               (local y)
+                   ^
+                   |
+              2 ---3--- 4
+              |    |    | 
+        <-----1----+----5-----> (local x)     
+              |    |    |
+              0 ---7--- 6
+                   |
+                   v
 
     */
 

@@ -31,11 +31,11 @@ class PhysicsSteadyConvectionDiffusion : public PhysicsSteadyBase
     set_variablegroup : void
         Set variables used in this physics.
     set_domain : void
-        Set scalars applied to 2D domains.
+        Set scalars applied to 3D domains.
     set_boundary_dirichlet : void
-        Set a Dirichlet boundary condition along a 1D domain.
+        Set a Dirichlet boundary condition along a 2D domain.
     set_boundary_neumann : void
-        Set a Neumann boundary condition along a 1D domain.
+        Set a Neumann boundary condition along a 2D domain.
 
     */
 
@@ -145,7 +145,7 @@ void PhysicsSteadyConvectionDiffusion::set_domain(Domain3D &domain_in, Integral3
 {
     /*
     
-    Set scalars applied to 2D domains.
+    Set scalars applied to 3D domains.
 
     Arguments
     =========
@@ -199,7 +199,7 @@ void PhysicsSteadyConvectionDiffusion::set_boundary_dirichlet(Domain2D &domain_i
 {
     /*
     
-    Set a Dirichlet boundary condition along a 1D domain.
+    Set a Dirichlet boundary condition along a 2D domain.
 
     Arguments
     =========
@@ -227,7 +227,7 @@ void PhysicsSteadyConvectionDiffusion::set_boundary_neumann(Domain2D &domain_in,
 {
     /*
     
-    Set a Neumann boundary condition along a 1D domain.
+    Set a Neumann boundary condition along a 2D domain.
 
     Arguments
     =========

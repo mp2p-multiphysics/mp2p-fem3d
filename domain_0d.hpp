@@ -14,7 +14,7 @@ class Domain0D
 {
     /*
 
-    Representation of a 1D domain.
+    Representation of a 0D domain.
 
     Variables
     =========
@@ -31,9 +31,8 @@ class Domain0D
         global point ID of local point 1
         ...
 
-    Point 0 and 1 refer to the left and right points of a line2 element.
-    Point 0, 1, and 2 refer to the left, middle, and right points of a line3 element.
-
+    Point 0 refers to the point.
+    
     */
 
     public:

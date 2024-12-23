@@ -31,7 +31,7 @@ class PhysicsTransientConvectionDiffusion : public PhysicsTransientBase
     set_variablegroup : void
         Set variables used in this physics.
     set_domain : void
-        Set scalars applied to 2D domains.
+        Set scalars applied to 3D domains.
     set_boundary_dirichlet : void
         Set a Dirichlet boundary condition along a 1D domain.
     set_boundary_neumann : void
@@ -153,7 +153,7 @@ void PhysicsTransientConvectionDiffusion::set_domain(Domain3D &domain_in, Integr
 {
     /*
     
-    Set scalars applied to 2D domains.
+    Set scalars applied to 3D domains.
 
     Arguments
     =========
@@ -212,7 +212,7 @@ void PhysicsTransientConvectionDiffusion::set_boundary_dirichlet(Domain2D &domai
 {
     /*
     
-    Set a Dirichlet boundary condition along a 1D domain.
+    Set a Dirichlet boundary condition along a 2D domain.
 
     Arguments
     =========
@@ -240,7 +240,7 @@ void PhysicsTransientConvectionDiffusion::set_boundary_neumann(Domain2D &domain_
 {
     /*
     
-    Set a Neumann boundary condition along a 1D domain.
+    Set a Neumann boundary condition along a 2D domain.
 
     Arguments
     =========

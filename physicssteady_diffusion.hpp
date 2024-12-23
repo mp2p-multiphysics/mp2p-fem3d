@@ -31,11 +31,11 @@ class PhysicsSteadyDiffusion : public PhysicsSteadyBase
     set_variablegroup : void
         Set variables used in this physics.
     set_domain : void
-        Set scalars applied to 2D domains.
+        Set scalars applied to 3D domains.
     set_boundary_dirichlet : void
-        Set a Dirichlet boundary condition along a 1D domain.
+        Set a Dirichlet boundary condition along a 2D domain.
     set_boundary_neumann : void
-        Set a Neumann boundary condition along a 1D domain.
+        Set a Neumann boundary condition along a 2D domain.
 
     */
 
@@ -142,7 +142,7 @@ void PhysicsSteadyDiffusion::set_domain(Domain3D &domain_in, Integral3D &integra
 {
     /*
     
-    Set scalars applied to 2D domains.
+    Set scalars applied to 3D domains.
 
     Arguments
     =========
@@ -181,7 +181,7 @@ void PhysicsSteadyDiffusion::set_boundary_dirichlet(Domain2D &domain_in, Scalar2
 {
     /*
     
-    Set a Dirichlet boundary condition along a 1D domain.
+    Set a Dirichlet boundary condition along a 2D domain.
 
     Arguments
     =========
@@ -209,7 +209,7 @@ void PhysicsSteadyDiffusion::set_boundary_neumann(Domain2D &domain_in, Integral2
 {
     /*
     
-    Set a Neumann boundary condition along a 1D domain.
+    Set a Neumann boundary condition along a 2D domain.
 
     Arguments
     =========

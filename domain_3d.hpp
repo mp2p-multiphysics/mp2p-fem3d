@@ -38,31 +38,9 @@ class Domain3D
         global point ID of local point 2
         ...
 
-    Points 0 to 3 are shown below for a tet4 element in local coordinates.
-
-          (local y)
-             ^      ^ (local z)
-             |     /
-             2    1
-             |   /
-             |  /   
-             | /      
-        <----3---------0------> (local x)
-             |
-             v
-
-    Points 0 to 7 are shown below for a hex8 element in local coordinates.
-
-               (local y)
-                   ^   ^ (local z)
-               6   |  /  7
-                   | /
-           1       |/2
-        <----------+----------> (local x)     
-               5  /|     8
-                 / |
-           0    /  | 3
-               v   v
+    Locations of the local points were obtained from the following reference:
+        Mazdziarz M. (2010) Unified Isoparametric 3D Lagrange Finite Elements,
+        Computer Modeling in Engineering & Sciences 2010, 66(1), 1-24.
 
     */
 

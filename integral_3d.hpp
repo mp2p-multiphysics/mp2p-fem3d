@@ -271,7 +271,7 @@ void Integral3D::evaluate_integral_Ni_derivative_Nj_z()
 {
     /*
 
-    Calculates the integral of Ni * d(Nj)/dy.
+    Calculates the integral of Ni * d(Nj)/dz.
 
     Arguments
     =========
