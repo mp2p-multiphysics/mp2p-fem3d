@@ -267,6 +267,48 @@ void Integral3D::evaluate_integral_Ni_derivative_Nj_y()
 
 }
 
+void Integral3D::evaluate_integral_Ni_derivative_Nj_z()
+{
+    /*
+
+    Calculates the integral of Ni * d(Nj)/dy.
+
+    Arguments
+    =========
+    (none)
+
+    Returns
+    =========
+    (none)
+
+    */
+
+    // iterate for each domain element
+    for (int edid = 0; edid < domain_ptr->num_element; edid++){  
+    
+    // iterate for each test function combination
+    VectorDouble2D integral_part_i_vec;
+    for (int indx_i = 0; indx_i < domain_ptr->num_neighbor; indx_i++){  
+    VectorDouble integral_part_ij_vec;
+    for (int indx_j = 0; indx_j < domain_ptr->num_neighbor; indx_j++){
+        
+        // iterate for each integration point
+        double integral_value = 0;
+        for (int indx_l = 0; indx_l < weight_vec.size(); indx_l++) 
+        {
+            integral_value += weight_vec[indx_l] * jacobian_determinant_vec[edid][indx_l] * Ni_vec[edid][indx_l][indx_i] * derivative_Ni_z_vec[edid][indx_l][indx_j];
+        }
+        integral_part_ij_vec.push_back(integral_value);
+    
+    }
+    integral_part_i_vec.push_back(integral_part_ij_vec);
+    }
+    integral_Ni_derivative_Nj_z_vec.push_back(integral_part_i_vec);
+
+    }
+
+}
+
 void Integral3D::evaluate_integral_div_Ni_dot_div_Nj()
 {
     /*
