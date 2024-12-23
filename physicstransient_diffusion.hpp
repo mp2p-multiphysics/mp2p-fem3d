@@ -3,17 +3,17 @@
 #include <vector>
 #include "Eigen/Eigen"
 #include "container_typedef.hpp"
-#include "domain_1d.hpp"
 #include "domain_2d.hpp"
-#include "integral_1d.hpp"
+#include "domain_3d.hpp"
 #include "integral_2d.hpp"
+#include "integral_3d.hpp"
 #include "physicstransient_base.hpp"
-#include "scalar_1d.hpp"
 #include "scalar_2d.hpp"
-#include "variable_2d.hpp"
+#include "scalar_3d.hpp"
+#include "variable_3d.hpp"
 #include "variable_group.hpp"
 
-namespace FEM2D
+namespace FEM3D
 {
 
 class PhysicsTransientDiffusion : public PhysicsTransientBase
@@ -45,24 +45,24 @@ class PhysicsTransientDiffusion : public PhysicsTransientBase
     VariableGroup* value_ptr;
 
     // domain objects
-    std::vector<Domain2D*> domain_ptr_vec;
-    std::vector<Integral2D*> integral_ptr_vec;
-    std::vector<Scalar2D*> derivativecoefficient_ptr_vec;
-    std::vector<Scalar2D*> diffusioncoefficient_ptr_vec;
-    std::vector<Scalar2D*> generationcoefficient_ptr_vec;
+    std::vector<Domain3D*> domain_ptr_vec;
+    std::vector<Integral3D*> integral_ptr_vec;
+    std::vector<Scalar3D*> derivativecoefficient_ptr_vec;
+    std::vector<Scalar3D*> diffusioncoefficient_ptr_vec;
+    std::vector<Scalar3D*> generationcoefficient_ptr_vec;
 
     // boundary objects - dirichlet
-    std::vector<Domain1D*> dirichlet_domain_ptr_vec;
-    std::vector<Scalar1D*> dirichlet_constant_ptr_vec;
+    std::vector<Domain2D*> dirichlet_domain_ptr_vec;
+    std::vector<Scalar2D*> dirichlet_constant_ptr_vec;
 
     // boundary objects - neumann
-    std::vector<Domain1D*> neumann_domain_ptr_vec;
-    std::vector<Integral1D*> neumann_integral_ptr_vec;
-    std::vector<Scalar1D*> neumann_flux_ptr_vec;
+    std::vector<Domain2D*> neumann_domain_ptr_vec;
+    std::vector<Integral2D*> neumann_integral_ptr_vec;
+    std::vector<Scalar2D*> neumann_flux_ptr_vec;
 
     // vectors of objects to update
-    std::vector<Scalar1D*> scalar1d_ptr_vec;
     std::vector<Scalar2D*> scalar2d_ptr_vec;
+    std::vector<Scalar3D*> scalar3d_ptr_vec;
     std::vector<VariableGroup*> variablegroup_ptr_vec;
 
     // starting row of test functions in matrix equation
@@ -74,15 +74,15 @@ class PhysicsTransientDiffusion : public PhysicsTransientBase
         EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt
     );
     void set_variablegroup(VariableGroup &value_in);
-    void set_domain(Domain2D &domain_in, Integral2D &integral_in, Scalar2D &derivativecoefficient_in, Scalar2D &diffusioncoefficient_in, Scalar2D &generationcoefficient_in);
-    void set_boundary_dirichlet(Domain1D &domain_in, Scalar1D &value_constant_in);
-    void set_boundary_neumann(Domain1D &domain_in, Integral1D &integral_in, Scalar1D &value_flux_in);
+    void set_domain(Domain3D &domain_in, Integral3D &integral_in, Scalar3D &derivativecoefficient_in, Scalar3D &diffusioncoefficient_in, Scalar3D &generationcoefficient_in);
+    void set_boundary_dirichlet(Domain2D &domain_in, Scalar2D &value_constant_in);
+    void set_boundary_neumann(Domain2D &domain_in, Integral2D &integral_in, Scalar2D &value_flux_in);
 
     // getter and setter functions
     void set_start_row(int start_row_in) {start_row = start_row_in;}
     int get_start_row() {return start_row;}
-    std::vector<Scalar1D*> get_scalar1d_ptr_vec() {return scalar1d_ptr_vec;}
     std::vector<Scalar2D*> get_scalar2d_ptr_vec() {return scalar2d_ptr_vec;}
+    std::vector<Scalar3D*> get_scalar3d_ptr_vec() {return scalar3d_ptr_vec;}
     std::vector<VariableGroup*> get_variablegroup_ptr_vec() {return variablegroup_ptr_vec;}
 
     // default constructor
@@ -94,28 +94,28 @@ class PhysicsTransientDiffusion : public PhysicsTransientBase
     (
         std::vector<EigenTriplet> &delta_a_triplet_vec, std::vector<EigenTriplet> &delta_c_triplet_vec, EigenVector &d_vec,
         EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-        Domain2D *domain_ptr, Integral2D *integral_ptr,
-        Scalar2D *derivativecoefficient_ptr, Scalar2D *diffusioncoefficient_ptr, Scalar2D *generationcoefficient_ptr
+        Domain3D *domain_ptr, Integral3D *integral_ptr,
+        Scalar3D *derivativecoefficient_ptr, Scalar3D *diffusioncoefficient_ptr, Scalar3D *generationcoefficient_ptr
     );
     void matrix_fill_neumann
     (
         EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
         EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-        Domain1D *domain_ptr, Integral1D *integral_ptr,
-        Scalar1D *value_flux_ptr
+        Domain2D *domain_ptr, Integral2D *integral_ptr,
+        Scalar2D *value_flux_ptr
     );
     void matrix_fill_dirichlet_clear
     (
         EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
         EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-        Domain1D *domain_ptr
+        Domain2D *domain_ptr
     );
     void matrix_fill_dirichlet
     (
         EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
         EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-        Domain1D *domain_ptr,
-        Scalar1D *value_constant_ptr
+        Domain2D *domain_ptr,
+        Scalar2D *value_constant_ptr
     );
 
 };
@@ -146,7 +146,7 @@ void PhysicsTransientDiffusion::set_variablegroup(VariableGroup &value_in)
 
 }
 
-void PhysicsTransientDiffusion::set_domain(Domain2D &domain_in, Integral2D &integral_in, Scalar2D &derivativecoefficient_in, Scalar2D &diffusioncoefficient_in, Scalar2D &generationcoefficient_in)
+void PhysicsTransientDiffusion::set_domain(Domain3D &domain_in, Integral3D &integral_in, Scalar3D &derivativecoefficient_in, Scalar3D &diffusioncoefficient_in, Scalar3D &generationcoefficient_in)
 {
     /*
     
@@ -154,15 +154,15 @@ void PhysicsTransientDiffusion::set_domain(Domain2D &domain_in, Integral2D &inte
 
     Arguments
     =========
-    domain_in : Domain2D
+    domain_in : Domain3D
         Domain that this physics applies to.
-    integral_in : Integral2D
+    integral_in : Integral3D
         Test function integrals over the domains.
-    derivativecoefficient_in : Scalar2D
+    derivativecoefficient_in : Scalar3D
         a in a * du/dt = -div(-b * grad(u)) + c.
-    diffusioncoefficient_in : Scalar2D
+    diffusioncoefficient_in : Scalar3D
         b in a * du/dt = -div(-b * grad(u)) + c.
-    generationcoefficient_in : Scalar2D
+    generationcoefficient_in : Scalar3D
         c in a * du/dt = -div(-b * grad(u)) + c.
 
     Returns
@@ -178,10 +178,10 @@ void PhysicsTransientDiffusion::set_domain(Domain2D &domain_in, Integral2D &inte
     diffusioncoefficient_ptr_vec.push_back(&diffusioncoefficient_in);
     generationcoefficient_ptr_vec.push_back(&generationcoefficient_in);
 
-    // add to vector of scalar2d objects
-    scalar2d_ptr_vec.push_back(&derivativecoefficient_in);
-    scalar2d_ptr_vec.push_back(&diffusioncoefficient_in);
-    scalar2d_ptr_vec.push_back(&generationcoefficient_in);
+    // add to vector of scalar3d objects
+    scalar3d_ptr_vec.push_back(&derivativecoefficient_in);
+    scalar3d_ptr_vec.push_back(&diffusioncoefficient_in);
+    scalar3d_ptr_vec.push_back(&generationcoefficient_in);
 
     // calculate integrals
     integral_in.evaluate_integral_Ni();
@@ -190,7 +190,7 @@ void PhysicsTransientDiffusion::set_domain(Domain2D &domain_in, Integral2D &inte
 
 }
 
-void PhysicsTransientDiffusion::set_boundary_dirichlet(Domain1D &domain_in, Scalar1D &value_constant_in)
+void PhysicsTransientDiffusion::set_boundary_dirichlet(Domain2D &domain_in, Scalar2D &value_constant_in)
 {
     /*
     
@@ -198,9 +198,9 @@ void PhysicsTransientDiffusion::set_boundary_dirichlet(Domain1D &domain_in, Scal
 
     Arguments
     =========
-    domain_in : Domain1D
+    domain_in : Domain2D
         Domain that this boundary condition applies to.
-    value_constant_in : Scalar1D
+    value_constant_in : Scalar2D
         Constant value prescribed by the boundary condition.
 
     Returns
@@ -213,12 +213,12 @@ void PhysicsTransientDiffusion::set_boundary_dirichlet(Domain1D &domain_in, Scal
     dirichlet_domain_ptr_vec.push_back(&domain_in);
     dirichlet_constant_ptr_vec.push_back(&value_constant_in);
 
-    // add to vector of scalar1d objects
-    scalar1d_ptr_vec.push_back(&value_constant_in);
+    // add to vector of scalar2d objects
+    scalar2d_ptr_vec.push_back(&value_constant_in);
 
 }
 
-void PhysicsTransientDiffusion::set_boundary_neumann(Domain1D &domain_in, Integral1D &integral_in, Scalar1D &value_flux_in)
+void PhysicsTransientDiffusion::set_boundary_neumann(Domain2D &domain_in, Integral2D &integral_in, Scalar2D &value_flux_in)
 {
     /*
     
@@ -226,11 +226,11 @@ void PhysicsTransientDiffusion::set_boundary_neumann(Domain1D &domain_in, Integr
 
     Arguments
     =========
-    domain_in : Domain1D
+    domain_in : Domain2D
         Domain that this boundary condition applies to.
-    integral_in : Integral1D
+    integral_in : Integral2D
         Test function integrals over the domains.
-    value_flux_in : Scalar1D
+    value_flux_in : Scalar2D
         Flux prescribed by the boundary condition.
 
     Returns
@@ -244,8 +244,8 @@ void PhysicsTransientDiffusion::set_boundary_neumann(Domain1D &domain_in, Integr
     neumann_integral_ptr_vec.push_back(&integral_in);
     neumann_flux_ptr_vec.push_back(&value_flux_in);
 
-    // add to vector of scalar1d objects
-    scalar1d_ptr_vec.push_back(&value_flux_in);
+    // add to vector of scalar2d objects
+    scalar2d_ptr_vec.push_back(&value_flux_in);
 
     // calculate integrals
     integral_in.evaluate_integral_Ni();
@@ -295,11 +295,11 @@ void PhysicsTransientDiffusion::matrix_fill
     {
 
         // subset domain objects
-        Domain2D *domain_ptr = domain_ptr_vec[indx_d];
-        Integral2D *integral_ptr = integral_ptr_vec[indx_d];
-        Scalar2D *derivativecoefficient_ptr = derivativecoefficient_ptr_vec[indx_d];
-        Scalar2D *diffusioncoefficient_ptr = diffusioncoefficient_ptr_vec[indx_d];
-        Scalar2D *generationcoefficient_ptr = generationcoefficient_ptr_vec[indx_d];
+        Domain3D *domain_ptr = domain_ptr_vec[indx_d];
+        Integral3D *integral_ptr = integral_ptr_vec[indx_d];
+        Scalar3D *derivativecoefficient_ptr = derivativecoefficient_ptr_vec[indx_d];
+        Scalar3D *diffusioncoefficient_ptr = diffusioncoefficient_ptr_vec[indx_d];
+        Scalar3D *generationcoefficient_ptr = generationcoefficient_ptr_vec[indx_d];
 
         // fill up matrix with domain equations
         matrix_fill_domain(
@@ -323,9 +323,9 @@ void PhysicsTransientDiffusion::matrix_fill
     {
 
         // subset domain objects
-        Domain1D *domain_ptr = neumann_domain_ptr_vec[indx_d];
-        Integral1D *integral_ptr = neumann_integral_ptr_vec[indx_d];
-        Scalar1D *value_flux_ptr = neumann_flux_ptr_vec[indx_d];
+        Domain2D *domain_ptr = neumann_domain_ptr_vec[indx_d];
+        Integral2D *integral_ptr = neumann_integral_ptr_vec[indx_d];
+        Scalar2D *value_flux_ptr = neumann_flux_ptr_vec[indx_d];
 
         // fill up matrix with boundary conditions
         matrix_fill_neumann(
@@ -340,7 +340,7 @@ void PhysicsTransientDiffusion::matrix_fill
     {
 
         // subset domain objects
-        Domain1D *domain_ptr = dirichlet_domain_ptr_vec[indx_d];
+        Domain2D *domain_ptr = dirichlet_domain_ptr_vec[indx_d];
 
         // fill up matrix with boundary conditions
         matrix_fill_dirichlet_clear(
@@ -355,8 +355,8 @@ void PhysicsTransientDiffusion::matrix_fill
     {
 
         // subset domain objects
-        Domain1D *domain_ptr = dirichlet_domain_ptr_vec[indx_d];
-        Scalar1D *value_constant_ptr = dirichlet_constant_ptr_vec[indx_d];
+        Domain2D *domain_ptr = dirichlet_domain_ptr_vec[indx_d];
+        Scalar2D *value_constant_ptr = dirichlet_constant_ptr_vec[indx_d];
 
         // fill up matrix with boundary conditions
         matrix_fill_dirichlet(
@@ -372,8 +372,8 @@ void PhysicsTransientDiffusion::matrix_fill_domain
 (
     std::vector<EigenTriplet> &delta_a_triplet_vec, std::vector<EigenTriplet> &delta_c_triplet_vec, EigenVector &d_vec,
     EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-    Domain2D *domain_ptr, Integral2D *integral_ptr,
-    Scalar2D *derivativecoefficient_ptr, Scalar2D *diffusioncoefficient_ptr, Scalar2D *generationcoefficient_ptr
+    Domain3D *domain_ptr, Integral3D *integral_ptr,
+    Scalar3D *derivativecoefficient_ptr, Scalar3D *diffusioncoefficient_ptr, Scalar3D *generationcoefficient_ptr
 )
 {
 
@@ -421,8 +421,8 @@ void PhysicsTransientDiffusion::matrix_fill_neumann
 (
     EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
     EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-    Domain1D *domain_ptr, Integral1D *integral_ptr,
-    Scalar1D *value_flux_ptr
+    Domain2D *domain_ptr, Integral2D *integral_ptr,
+    Scalar2D *value_flux_ptr
 )
 {
 
@@ -451,7 +451,7 @@ void PhysicsTransientDiffusion::matrix_fill_dirichlet_clear
 (
     EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
     EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-    Domain1D *domain_ptr
+    Domain2D *domain_ptr
 )
 {
 
@@ -479,8 +479,8 @@ void PhysicsTransientDiffusion::matrix_fill_dirichlet
 (
     EigenSparseMatrix &a_mat, EigenSparseMatrix &c_mat, EigenVector &d_vec,
     EigenVector &x_vec, EigenVector &x_last_timestep_vec, double dt,
-    Domain1D *domain_ptr,
-    Scalar1D *value_constant_ptr
+    Domain2D *domain_ptr,
+    Scalar2D *value_constant_ptr
 )
 {
 

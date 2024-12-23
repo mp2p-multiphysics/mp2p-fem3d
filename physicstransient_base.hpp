@@ -3,11 +3,11 @@
 #include <vector>
 #include "Eigen/Eigen"
 #include "container_typedef.hpp"
-#include "scalar_1d.hpp"
 #include "scalar_2d.hpp"
+#include "scalar_3d.hpp"
 #include "variable_group.hpp"
 
-namespace FEM2D
+namespace FEM3D
 {
 
 class PhysicsTransientBase
@@ -24,10 +24,10 @@ class PhysicsTransientBase
         Sets the starting row in A and b where entries are filled up.
     get_start_row : int
         Returns the starting row.
-    get_scalar1d_ptr_vec : vector<BoundaryGroup*>
-        Returns the vector containing pointers to Scalar1D objects tied to this physics.
-    get_scalar2d_ptr_vec : vector<ScalarGroup*>
+    get_scalar2d_ptr_vec : vector<BoundaryGroup*>
         Returns the vector containing pointers to Scalar2D objects tied to this physics.
+    get_scalar3d_ptr_vec : vector<ScalarGroup*>
+        Returns the vector containing pointers to Scalar3D objects tied to this physics.
     get_variablegroup_ptr_vec : vector<VariableGroup*>
         Returns the vector containing pointers to VariableGroup objects tied to this physics.
 
@@ -36,8 +36,8 @@ class PhysicsTransientBase
     public:
 
     // vector of scalar and variable groups
-    std::vector<Scalar1D*> scalar1d_ptr_vec;
     std::vector<Scalar2D*> scalar2d_ptr_vec;
+    std::vector<Scalar3D*> scalar3d_ptr_vec;
     std::vector<VariableGroup*> variablegroup_ptr_vec;
     
     // starting row of test functions in matrix equation
@@ -50,8 +50,8 @@ class PhysicsTransientBase
     );
     virtual void set_start_row(int start_row_in) {start_row = start_row_in;}
     virtual int get_start_row() {return start_row;}
-    virtual std::vector<Scalar1D*> get_scalar1d_ptr_vec() {return scalar1d_ptr_vec;}
     virtual std::vector<Scalar2D*> get_scalar2d_ptr_vec() {return scalar2d_ptr_vec;}
+    virtual std::vector<Scalar3D*> get_scalar3d_ptr_vec() {return scalar3d_ptr_vec;}
     virtual std::vector<VariableGroup*> get_variablegroup_ptr_vec() {return variablegroup_ptr_vec;}
 
     // default constructor

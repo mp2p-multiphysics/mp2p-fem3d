@@ -8,7 +8,7 @@
 #include "physicstransient_base.hpp"
 #include "variable_group.hpp"
 
-namespace FEM2D
+namespace FEM3D
 {
 
 class MatrixEquationTransient
@@ -42,8 +42,8 @@ class MatrixEquationTransient
 
     // vector of physics
     std::vector<PhysicsTransientBase*> physics_ptr_vec;
-    std::vector<Scalar1D*> scalar1d_ptr_vec;
     std::vector<Scalar2D*> scalar2d_ptr_vec;
+    std::vector<Scalar3D*> scalar3d_ptr_vec;
     std::vector<VariableGroup*> variablegroup_ptr_vec;
 
     // matrix equation variables
@@ -123,21 +123,21 @@ class MatrixEquationTransient
         // extract scalars and vectors from each physics
 
         // initialize set of scalars and variables
-        std::unordered_set<Scalar1D*> scalar1d_ptr_set;
         std::unordered_set<Scalar2D*> scalar2d_ptr_set;
+        std::unordered_set<Scalar3D*> scalar3d_ptr_set;
         std::unordered_set<VariableGroup*> variablegroup_ptr_set;
 
         // iterate through each physics
         // get vectors of scalars and variables
         for (auto physics_ptr : physics_ptr_vec)
         {
-            for (auto scalar1d_ptr : physics_ptr->get_scalar1d_ptr_vec())
-            {
-                scalar1d_ptr_set.insert(scalar1d_ptr);
-            }
             for (auto scalar2d_ptr : physics_ptr->get_scalar2d_ptr_vec())
             {
                 scalar2d_ptr_set.insert(scalar2d_ptr);
+            }
+            for (auto scalar3d_ptr : physics_ptr->get_scalar3d_ptr_vec())
+            {
+                scalar3d_ptr_set.insert(scalar3d_ptr);
             }
             for (auto variablegroup_ptr : physics_ptr->get_variablegroup_ptr_vec())
             {
@@ -146,8 +146,8 @@ class MatrixEquationTransient
         }
 
         // convert sets to vectors
-        scalar1d_ptr_vec = std::vector<Scalar1D*>(scalar1d_ptr_set.begin(), scalar1d_ptr_set.end());
         scalar2d_ptr_vec = std::vector<Scalar2D*>(scalar2d_ptr_set.begin(), scalar2d_ptr_set.end());
+        scalar3d_ptr_vec = std::vector<Scalar3D*>(scalar3d_ptr_set.begin(), scalar3d_ptr_set.end());
         variablegroup_ptr_vec = std::vector<VariableGroup*>(variablegroup_ptr_set.begin(), variablegroup_ptr_set.end());
         
         // populate x_vec with initial values
@@ -315,13 +315,13 @@ void MatrixEquationTransient::iterate_solution(double dt)
 {
 
     // update scalars using most recent variable values
-    for (auto scalar1d_ptr : scalar1d_ptr_vec)
-    {
-        scalar1d_ptr->update_value();
-    }
     for (auto scalar2d_ptr : scalar2d_ptr_vec)
     {
         scalar2d_ptr->update_value();
+    }
+    for (auto scalar3d_ptr : scalar3d_ptr_vec)
+    {
+        scalar3d_ptr->update_value();
     }
 
     // reset matrices
@@ -380,13 +380,13 @@ void MatrixEquationTransient::output_solution(int ts)
 {
 
     // iterate through each variable group
-    for (auto scalar1d_ptr : scalar1d_ptr_vec)
-    {
-        scalar1d_ptr->output_csv(ts);
-    }
     for (auto scalar2d_ptr : scalar2d_ptr_vec)
     {
         scalar2d_ptr->output_csv(ts);
+    }
+    for (auto scalar3d_ptr : scalar3d_ptr_vec)
+    {
+        scalar3d_ptr->output_csv(ts);
     }
     for (auto variablegroup_ptr : variablegroup_ptr_vec)
     {
