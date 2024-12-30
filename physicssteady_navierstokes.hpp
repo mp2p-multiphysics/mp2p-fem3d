@@ -242,6 +242,7 @@ void PhysicsSteadyNavierStokes::set_domain(Domain3D &domain_line_in, Domain3D &d
     integral_in.evaluate_integral_Ni_derivative_Mj_x_line();
     integral_in.evaluate_integral_Ni_derivative_Mj_y_line();
     integral_in.evaluate_integral_Ni_derivative_Mj_z_line();
+    integral_in.evaluate_integral_Ni_Nj_line();
 
     // calculate quadratic domain integrals
     integral_in.evaluate_integral_Mi_quad();
@@ -711,6 +712,14 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
                 int mat_row = start_row + offset_cont + pres_pfid_vec[indx_i];
                 int mat_col = velocity_z_ptr->start_col + velz_pfid_vec[indx_j];
                 delta_a_triplet_vec.push_back(EigenTriplet(mat_row, mat_col, integral_ptr->integral_Ni_derivative_Mj_z_line_vec[edid][indx_i][indx_j]));
+            }
+
+            // pressure columns (for stability)
+            for (int indx_j = 0; indx_j < domain_line_ptr->num_neighbor; indx_j++)
+            {
+                int mat_row = start_row + offset_cont + pres_pfid_vec[indx_i];
+                int mat_col = pressure_ptr->start_col + pres_pfid_vec[indx_j];
+                delta_a_triplet_vec.push_back(EigenTriplet(mat_row, mat_col, 1e-8 * integral_ptr->integral_Ni_Nj_line_vec[edid][indx_i][indx_j]));
             }
 
         }

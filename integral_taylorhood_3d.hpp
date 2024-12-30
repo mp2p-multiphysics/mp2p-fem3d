@@ -94,6 +94,7 @@ class IntegralTaylorHood3D
     VectorDouble3D integral_Ni_derivative_Mj_x_line_vec;
     VectorDouble3D integral_Ni_derivative_Mj_y_line_vec;
     VectorDouble3D integral_Ni_derivative_Mj_z_line_vec;
+    VectorDouble3D integral_Ni_Nj_line_vec;
 
     // vectors with quadratic domain integrals
     // index as follows: [edid][i][j][k]
@@ -111,6 +112,7 @@ class IntegralTaylorHood3D
     void evaluate_integral_Ni_derivative_Mj_x_line();
     void evaluate_integral_Ni_derivative_Mj_y_line();
     void evaluate_integral_Ni_derivative_Mj_z_line();
+    void evaluate_integral_Ni_Nj_line();
 
     // functions for computing quadratic domain integrals
     void evaluate_integral_Mi_quad();
@@ -273,6 +275,48 @@ void IntegralTaylorHood3D::evaluate_integral_Ni_derivative_Mj_z_line()
     integral_part_i_vec.push_back(integral_part_ij_vec);
     }
     integral_Ni_derivative_Mj_z_line_vec.push_back(integral_part_i_vec);
+
+    }
+
+}
+
+void IntegralTaylorHood3D::evaluate_integral_Ni_Nj_line()
+{
+    /*
+
+    Calculates the integral of Ni * Nj over test functions in the linear domain.
+
+    Arguments
+    =========
+    (none)
+
+    Returns
+    =========
+    (none)
+
+    */
+
+    // iterate for each domain element
+    for (int edid = 0; edid < domain_line_ptr->num_element; edid++){  
+    
+    // iterate for each test function combination
+    VectorDouble2D integral_part_i_vec;
+    for (int indx_i = 0; indx_i < domain_line_ptr->num_neighbor; indx_i++){  
+    VectorDouble integral_part_ij_vec;
+    for (int indx_j = 0; indx_j < domain_quad_ptr->num_neighbor; indx_j++){
+        
+        // iterate for each integration point
+        double integral_value = 0;
+        for (int indx_l = 0; indx_l < weight_line_vec.size(); indx_l++) 
+        {
+            integral_value += weight_line_vec[indx_l] * jacobian_determinant_line_vec[edid][indx_l] * Ni_line_vec[edid][indx_l][indx_i] * Ni_line_vec[edid][indx_l][indx_j];
+        }
+        integral_part_ij_vec.push_back(integral_value);
+    
+    }
+    integral_part_i_vec.push_back(integral_part_ij_vec);
+    }
+    integral_Ni_Nj_line_vec.push_back(integral_part_i_vec);
 
     }
 
