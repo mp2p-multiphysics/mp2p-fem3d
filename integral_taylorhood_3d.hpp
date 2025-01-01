@@ -303,7 +303,7 @@ void IntegralTaylorHood3D::evaluate_integral_Ni_Nj_line()
     VectorDouble2D integral_part_i_vec;
     for (int indx_i = 0; indx_i < domain_line_ptr->num_neighbor; indx_i++){  
     VectorDouble integral_part_ij_vec;
-    for (int indx_j = 0; indx_j < domain_quad_ptr->num_neighbor; indx_j++){
+    for (int indx_j = 0; indx_j < domain_line_ptr->num_neighbor; indx_j++){
         
         // iterate for each integration point
         double integral_value = 0;
