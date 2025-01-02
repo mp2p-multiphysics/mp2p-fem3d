@@ -692,6 +692,9 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
         VectorInt velz_pfid_vec = velocity_z_ptr->get_neighbor_pfid(domain_quad_ptr, edid_quad);
         VectorInt pres_pfid_vec = pressure_ptr->get_neighbor_pfid(domain_line_ptr, edid);
 
+        // initialize terms added to pressure for stability
+        double pressure_stability_i = 0.;
+
         // iterate through test functions
         for (int indx_i = 0; indx_i < domain_line_ptr->num_neighbor; indx_i++)
         {
@@ -749,10 +752,18 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
                 // calculate matrix column
                 int mat_col = pressure_ptr->start_col + pres_pfid_vec[indx_j];
                 
+                // add small term to pressure for stability
+                double pressure_stability_ij = 1e-4 * integral_ptr->integral_Ni_Nj_line_vec[edid][indx_i][indx_j];
+                pressure_stability_i += pressure_stability_i;
+
                 // append to a_trivec
-                a_trivec.push_back(EigenTriplet(mat_row, mat_col, 1e-8 * integral_ptr->integral_Ni_Nj_line_vec[edid][indx_i][indx_j]));
+                a_trivec.push_back(EigenTriplet(mat_row, mat_col, pressure_stability_ij));
 
             }
+
+            // append to b_vec
+            // apply coefficients for stability
+            b_vec.coeffRef(indx_i) += pressure_stability_i;
 
         }
 
