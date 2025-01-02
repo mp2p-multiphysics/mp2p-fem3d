@@ -692,8 +692,8 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
         VectorInt velz_pfid_vec = velocity_z_ptr->get_neighbor_pfid(domain_quad_ptr, edid_quad);
         VectorInt pres_pfid_vec = pressure_ptr->get_neighbor_pfid(domain_line_ptr, edid);
 
-        // initialize terms added to pressure for stability
-        double pressure_stability_i = 0.;
+        // get pressures of points around element
+        VectorDouble pres_vec = pressure_ptr->get_neighbor_value(domain_line_ptr, edid);
 
         // iterate through test functions
         for (int indx_i = 0; indx_i < domain_line_ptr->num_neighbor; indx_i++)
@@ -704,7 +704,10 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
             {
                 continue;
             }
-            
+
+            // initialize terms added to pressure for stability
+            double pressure_stability_i = 0.;
+
             // calculate matrix row
             int mat_row = start_row + offset_cont + pres_pfid_vec[indx_i];
 
@@ -763,7 +766,7 @@ void PhysicsSteadyNavierStokes::matrix_fill_domain
 
             // append to b_vec
             // apply coefficients for stability
-            b_vec.coeffRef(indx_i) += pressure_stability_i;
+            b_vec.coeffRef(indx_i) += pres_vec[indx_i] * pressure_stability_i;
 
         }
 
